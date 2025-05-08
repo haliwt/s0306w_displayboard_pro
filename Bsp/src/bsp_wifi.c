@@ -3,11 +3,11 @@
 static void  wifi_ico_fast_blink(void);
 
 
-void wifi_connect_state_fun(uint8_t data)
+void wifi_connect_state_fun(void)
 {
 
     static uint8_t wifi_led_blink;
-	switch(data){
+	switch(run_t.wifi_led_fast_blink){
     
     case 0x01:
 

@@ -6,12 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * S06 or  S04 don't  display board don't wifi fun.
-  *
-  * disply "mouse" symbol
-  * mass version 1.0 no wifi displayPanel DATA.2024.06.27
-  * mass version 2.1 interval ten minutes stop relay sound .DATA.2024.10.13
-  * update modify error number display . DATA.2024.10.24
+  * S06 display board has wifi function. 
+  * DATA:2025.05.07
+  * 
+  * 
+  * 
+  * 
   *
   ******************************************************************************
   */

@@ -161,6 +161,8 @@ static void vTaskRunPro(void *pvParameters)
 	
     while(1)
     {
+
+	#if 0
      //wifi_key 
      if(WIFI_KEY_VALUE() == KEY_DOWN &&   key_t.key_wifi_flag <60 && run_t.gPower_On == power_on){
         	key_t.key_wifi_flag++; 
@@ -287,6 +289,8 @@ static void vTaskRunPro(void *pvParameters)
 				}
 			    
 			}
+	#endif 
+	process_keys() ;
 
 	if(run_t.gPower_On == power_on){
 
@@ -303,7 +307,8 @@ static void vTaskRunPro(void *pvParameters)
        Display_TimeColon_Blink_Fun();
 	   RunLocal_Dht11_Data_Process();
        set_timer_fun_led_blink();
-       wifi_connect_state_fun(run_t.wifi_led_fast_blink);
+       wifi_connect_state_fun();
+	 
        if(power_on_theFirst_times < 10 && (gpro_t.set_timer_timing_doing_value==0 || gpro_t.set_timer_timing_doing_value==3)){
          power_on_theFirst_times ++;
          Display_DHT11_Value();
@@ -545,25 +550,6 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
    }
 }
 
-
-#if 0
-void USART1_Cmd_Error_Handler(void)
-{
-   uint32_t temp;
-   if(run_t.gTimer_usart_error >4){
-	  	run_t.gTimer_usart_error=0;
-	    
-         
-        __HAL_UART_CLEAR_OREFLAG(&huart1);
-        temp = USART1->RDR;
-		UART_Start_Receive_IT(&huart1,inputBuf,1);
-       
-		}
-      
-    
-  
- }
-#endif 
 void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
 {
 

@@ -9,6 +9,7 @@
 static void rx_answer_data_form_mainboard(uint8_t *pdata);
 
 
+
 /******************************************************************************
 *
 *Function Name:void send_cmd_ack_hanlder(void)
@@ -322,6 +323,8 @@ void receive_data_from_mainboard(uint8_t *pdata)
 		run_t.wifi_led_fast_blink=1;
 		run_t.wifi_connect_state_flag = wifi_connect_null;
 		run_t.gTimer_wifi_connect_counter =0; //120s counte start
+		 
+		
 
 		}
 		else if(pdata[4] == 0x0){ //close
@@ -429,22 +432,19 @@ void receive_data_from_mainboard(uint8_t *pdata)
         }
       break;
 
-	  case wifi_connect_data: //notice is command
+	  case wifi_connect_data: //0x1f notice is command
 	  	
         if(pdata[3]==0x00){ // 0xF is explain is data don't command.
 	    if(pdata[4] == 0x01){   //only 
 	  
            
-			 run_t.wifi_connect_state_flag = wifi_connect_success;
-	         run_t.wifi_led_fast_blink=0;
+		
 			  
 	  
 			}
 			else{ //close
 	  
-			   run_t.wifi_connect_state_flag = wifi_connect_null;
-	            run_t.wifi_led_fast_blink=0;
-			    run_t.display_beijing_time_flag =0;
+		
 	  
 			}
 	    }
@@ -549,7 +549,7 @@ void receive_data_from_mainboard(uint8_t *pdata)
  }
 
 
-static void rx_answer_data_form_mainboard(uint8_t *pdata)
+static void rx_answer_data_form_mainboard(uint8_t *pdata )
 {
     
     switch(pdata[3]){
@@ -619,24 +619,31 @@ static void rx_answer_data_form_mainboard(uint8_t *pdata)
 
 	  if(pdata[5] == 0x01){  // link wifi
 
-
+          run_t.wifi_connect_state_flag = wifi_connect_null;
+	       run_t.wifi_led_fast_blink=1;
+			  
+	  
+			}
+			else{ //close
+	  
+			   run_t.wifi_connect_state_flag = wifi_connect_null;
+	            run_t.wifi_led_fast_blink=0;
+			    run_t.display_beijing_time_flag =0;
+	  
+			}
 
       }
-      else if(pdata[3] == 0x0){ //don't link wifi
-
-
-
-
-      }
-      }
+     
 
    break;
+
+   
 
 
     
     
     case ack_with_buzzer:
-        if(pdata[4] == 1){  //buzzer answer command
+        if(pdata[5] == 1){  //buzzer answer command
 
            
 
