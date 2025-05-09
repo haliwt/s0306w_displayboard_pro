@@ -615,9 +615,15 @@ void compare_temp_value(void)
 {
     static uint8_t first_one_flag;
 
-    if(gpro_t.set_temp_value_success ==1){
+	if(gpro_t.gTimer_temp_compare_counter > 3){
 		
-	     gpro_t.gTimer_set_temperature_value =0;
+	    gpro_t.gTimer_temp_compare_counter =0;
+
+    switch(gpro_t.set_temp_value_success){
+
+	case 1:
+		
+	    gpro_t.gTimer_set_temperature_value =0;
     
 
      if(gpro_t.set_up_temperature_value >run_t.gReal_humtemp[1]){ //PTC TURN ON
@@ -638,9 +644,9 @@ void compare_temp_value(void)
     	  osDelay(5);
     
          }
+   break;
 
-   }
-   else{
+   case 0:
         if(run_t.gReal_humtemp[1] >39){
 
          run_t.gDry =0;
@@ -675,8 +681,10 @@ void compare_temp_value(void)
 
 			 }
            }
+	break;
 
       }
+		}
 }
 
 /***********************************************************************

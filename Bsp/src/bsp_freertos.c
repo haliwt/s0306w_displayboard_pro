@@ -308,6 +308,7 @@ static void vTaskRunPro(void *pvParameters)
 	   RunLocal_Dht11_Data_Process();
        set_timer_fun_led_blink();
        wifi_connect_state_fun();
+	   compare_temp_value();
 	 
        if(power_on_theFirst_times < 10 && (gpro_t.set_timer_timing_doing_value==0 || gpro_t.set_timer_timing_doing_value==3)){
          power_on_theFirst_times ++;
