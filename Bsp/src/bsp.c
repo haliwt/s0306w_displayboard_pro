@@ -628,26 +628,18 @@ void compare_temp_value(void)
       if(gpro_t.g_manual_shutoff_dry_flag == 0){ //allow open dry function 
          run_t.gDry =1;
     	
-        LED_DRY_ON();
-      
-	   	// SendData_Tx_Data(0x11,gpro_t.set_up_temperature_value);
-		   SendData_Set_Command(dry_notice_cmd,0x01);//SendData_Set_Command(DRY_ON_NO_BUZZER);
-		   osDelay(5);
-		   //gpro_t.send_ack_cmd = check_ack_dry_notice_on;
-		   //gpro_t.gTimer_again_send_power_on_off =0;
-
-        
-        
-     }
+         LED_DRY_ON();
+         SendData_Set_Command(dry_notice_cmd,0x01);//SendData_Set_Command(DRY_ON_NO_BUZZER);
+		 osDelay(5);
+		 }
      }
      else{ //PTC turn off 
          run_t.gDry =0;
          LED_DRY_OFF();
-       // SendData_Tx_Data(0x11,gpro_t.set_up_temperature_value);
+      
     	 SendData_Set_Command(dry_notice_cmd,0x0);//SendData_Set_Command(DRY_OFF_NO_BUZZER);
     	  osDelay(5);
-    	// gpro_t.send_ack_cmd = check_ack_dry_notice_off;
-		// gpro_t.gTimer_again_send_power_on_off =0;
+    
          }
 
    }
@@ -656,10 +648,9 @@ void compare_temp_value(void)
 
          run_t.gDry =0;
          LED_DRY_OFF();
-       //  SendData_Tx_Data(0x11,gpro_t.set_up_temperature_value);
+      
     	 SendData_Set_Command(dry_notice_cmd,0x0);//SendData_Set_Command(DRY_OFF_NO_BUZZER);
-    	 //gpro_t.send_ack_cmd = check_ack_dry_notice_off;
-		 //gpro_t.gTimer_again_send_power_on_off =0;
+    	
         
          first_one_flag =1;
         }
@@ -671,15 +662,21 @@ void compare_temp_value(void)
                  run_t.gDry =1;
             
                 LED_DRY_ON();
-		         SendData_Set_Command(dry_notice_cmd,0x01);
+		        SendData_Set_Command(dry_notice_cmd,0x01);
+				osDelay(5);
+
+             }
+		     else if(first_one_flag==0 && (run_t.gReal_humtemp[1] <39) && gpro_t.g_manual_shutoff_dry_flag == 0){
 
               
-             
-        	       ///gpro_t.send_ack_cmd = check_ack_dry_notice_on;
-		          //gpro_t.gTimer_again_send_power_on_off =0;
+                 run_t.gDry =1;
+            
+                LED_DRY_ON();
+		        SendData_Set_Command(dry_notice_cmd,0x01);
+				osDelay(5);
 
-                
-               }
+
+			 }
            }
 
       }

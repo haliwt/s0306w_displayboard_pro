@@ -337,6 +337,8 @@ void receive_data_from_mainboard(uint8_t *pdata)
 
 	 break;
 
+	
+
 
 
 
@@ -434,19 +436,25 @@ void receive_data_from_mainboard(uint8_t *pdata)
 
 	  case wifi_connect_data: //0x1f notice is command
 	  	
-        if(pdata[3]==0x00){ // 0xF is explain is data don't command.
+        if(pdata[3]==0x0F){ // 0xF is explain is data don't command.
 	    if(pdata[4] == 0x01){   //only 
-	  
-           
+
+		     if(pdata[5]==1){
+             run_t.wifi_led_fast_blink=0;
+			 run_t.wifi_connect_state_flag = wifi_connect_success;
+			 run_t.gTimer_wifi_connect_counter =0; //120s counte start
 		
 			  
 	  
 			}
 			else{ //close
 	  
-		
+		      run_t.wifi_led_fast_blink=0;
+			 run_t.wifi_connect_state_flag = wifi_connect_null;
+			 run_t.gTimer_wifi_connect_counter =0; //120s counte start
 	  
 			}
+	    	}
 	    }
   
 	  break;
@@ -498,13 +506,13 @@ void receive_data_from_mainboard(uint8_t *pdata)
 	  
 			 gpro_t.g_manual_shutoff_dry_flag = 0 ;//  allow open dry function
              gpro_t.set_temp_value_success=1;//
-             //run_t.set_temperature_special_flag=1;
+        
              run_t.gTimer_key_temp_timing=0;
 
-			   run_t.set_temperature_decade_value = gpro_t.set_up_temperature_value / 10 ;
-               run_t.set_temperature_unit_value  =gpro_t.set_up_temperature_value % 10; //
+			 run_t.set_temperature_decade_value = gpro_t.set_up_temperature_value / 10 ;
+             run_t.set_temperature_unit_value  =gpro_t.set_up_temperature_value % 10; //
 
-              // TM1639_Write_2bit_SetUp_TempData(run_t.set_temperature_decade_value,run_t.set_temperature_unit_value,0);
+             TM1639_Write_2bit_SetUp_TempData(run_t.set_temperature_decade_value,run_t.set_temperature_unit_value,0);
 				
 	  
 			 
