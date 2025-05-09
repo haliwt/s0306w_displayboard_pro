@@ -439,11 +439,9 @@ void receive_data_from_mainboard(uint8_t *pdata)
 			if(pdata[4]== 0x01){
 
 	            run_t.ptc_warning = 1;
-	            //run_t.setup_timer_timing_item =  PTC_WARNING; //ptc warning
-	           
-
 	            run_t.gDry =0;
-	            SendData_Set_Command(0x22,0x0); //close ptc ,but don't buzzer sound .
+			    LED_DRY_OFF();
+	           
 
 	        }
 	        else if(pdata[4] == 0x0){ //close
@@ -457,14 +455,17 @@ void receive_data_from_mainboard(uint8_t *pdata)
 
       break;
 
-      case 0x09: //fan of default of warning.
+      case fan_warning: //fan of default of warning.
 
-         if(pdata[3] == 0x01){  //warning
+         if(pdata[3] == 0x00){  //warning
 
+            if(pdata[4]==1){
             run_t.fan_warning = 1;
 
            run_t.gDry =0;
-           SendData_Set_Command(0x22,0x0); //0x22:PTC notice close .
+		   LED_DRY_OFF();
+           //SendData_Set_Command(0x22,0x0); //0x22:PTC notice close .
+           }
 
         }
         else if(pdata[3] == 0x0){ //close
