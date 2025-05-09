@@ -255,6 +255,23 @@ void receive_data_from_mainboard(uint8_t *pdata)
 
      break;
 
+	 case 0x21: //smart phone power on or off that App timer .
+        if(pdata[3]==0x00){ //power on by smart phone APP
+
+		   if(pdata[4]==0x01){
+
+		   run_t.wifi_connect_state_flag = wifi_connect_success;
+		   	
+           gpro_t.smartphone_app_timer_power_on_flag =1;
+		    run_t.gPower_On = power_on;
+			 power_on_handler();
+		   	}
+           
+             
+         }
+       
+     break; 
+
      case dry_cmd: //PTC打开关闭指令
        
      if(pdata[3] == 0x00){
@@ -500,6 +517,8 @@ void receive_data_from_mainboard(uint8_t *pdata)
 
         }
       break;
+
+	  
 
 	  case 0x2A: //main board set temperature value 
 	  

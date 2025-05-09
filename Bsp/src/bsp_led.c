@@ -301,12 +301,13 @@ void Power_Off_Led_Off(void)
    LED_MOUSE_OFF();
    LED_POWER_OFF();
    SMG_POWER_OFF();
+   Power_Off_Fun();
 
 }
 
 void Power_ON_Led(void)
 {
-   
+   if(gpro_t.smartphone_app_timer_power_on_flag ==0){
    LED_DRY_ON();
    LED_TIME_ON();
    LED_PLASMA_ON();
@@ -320,6 +321,15 @@ void Power_ON_Led(void)
 		 LED_WIFI_OFF();
 	 
 	 }
+   	}
+    else{
+	  LED_TIME_ON();
+
+	  LED_POWER_ON();
+	  SMG_POWER_ON();
+
+
+	}
 	
 
 }

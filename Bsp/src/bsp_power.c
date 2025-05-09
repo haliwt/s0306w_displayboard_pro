@@ -115,9 +115,7 @@ void Power_Off_Fun(void)
 		run_t.gDry =0;
 		run_t.gMouse = 0;
 		
-        run_t.gPower_On =power_off;
-		run_t.gTimer_set_temp_times=0; //conflict with send temperatur value 
-       Power_Off_Led_Off();
+       
 
   
 } 
