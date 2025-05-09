@@ -87,12 +87,10 @@ void Panel_Led_OnOff_Function(void)
     }
 	 
 	  
-    if(run_t.gDry==1){
+    if(run_t.gDry==1 && gpro_t.g_manual_shutoff_dry_flag ==0){
 		 
-	    
-      LED_DRY_ON();
+	    LED_DRY_ON();
       
-                 
      }
 	 else{
 	   LED_DRY_OFF();

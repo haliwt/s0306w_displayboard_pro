@@ -604,9 +604,6 @@ void SetDataTemperatureValue(void)
 
 
 }
-
-
-
 /*******************************************************
 *
 *Function Name: void compare_temp_value()
@@ -650,7 +647,7 @@ void compare_temp_value(void)
          LED_DRY_OFF();
       
     	 SendData_Set_Command(dry_notice_cmd,0x0);//SendData_Set_Command(DRY_OFF_NO_BUZZER);
-    	
+    	 osDelay(5);
         
          first_one_flag =1;
         }
