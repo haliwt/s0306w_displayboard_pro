@@ -74,6 +74,7 @@ void power_on_run_handler(void)
 			gpro_t.set_timer_timing_doing_value = 0;
             gpro_t.g_manual_shutoff_dry_flag = 0; //allow open dry function .
             run_t.wifi_led_fast_blink=0;
+			gpro_t.gTimer_temp_compare_counter=0;
 			run_t.gRunCommand_label= SPECIAL_DISP;
 
 
@@ -224,6 +225,7 @@ void power_off_run_handler(void)
 		 
          //  Power_Off();
            Power_Off_Led_Off();
+		 gpro_t.smartphone_app_timer_power_on_flag =0;
          run_t.power_off_flag = 1;
        break;
 
@@ -615,7 +617,7 @@ void compare_temp_value(void)
 {
     static uint8_t first_one_flag;
 
-	if(gpro_t.gTimer_temp_compare_counter > 3){
+	if(gpro_t.gTimer_temp_compare_counter > 4){
 		
 	    gpro_t.gTimer_temp_compare_counter =0;
 

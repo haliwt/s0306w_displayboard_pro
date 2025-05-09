@@ -87,15 +87,16 @@ void Panel_Led_OnOff_Function(void)
     }
 	 
 	  
-    if(run_t.gDry==1 && gpro_t.g_manual_shutoff_dry_flag ==0){
+    if(run_t.gDry==1 && gpro_t.g_manual_shutoff_dry_flag ==0 && gpro_t.smartphone_app_timer_power_on_flag==0){
 		 
 	    LED_DRY_ON();
       
      }
-	 else{
+	 else if(gpro_t.smartphone_app_timer_power_on_flag==0){
 	   LED_DRY_OFF();
 
 	 }
+   	
 
 	 if(run_t.gPlasma==1){
 	 	LED_PLASMA_ON();

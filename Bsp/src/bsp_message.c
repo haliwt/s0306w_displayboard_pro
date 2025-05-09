@@ -266,11 +266,83 @@ void receive_data_from_mainboard(uint8_t *pdata)
 		    run_t.gPower_On = power_on;
 			 power_on_handler();
 		   	}
+		    else{
+
+				run_t.gPower_On = power_off;
+                run_t.gRunCommand_label =RUN_NULL;
+
+			}
            
              
          }
        
      break; 
+
+	 case 0x20: //手机定时开机，发送的数据，3个。
+
+	     if(pdata[3]==0x0F){ //power on by smart phone APP
+
+		   if(pdata[4]==0x03){
+
+                run_t.gDry =pdata[5];
+				if(run_t.gDry == 0){
+                  gpro_t.g_manual_shutoff_dry_flag =1;
+                  LED_DRY_OFF();
+				}
+				else{
+                   LED_DRY_ON();
+				}
+
+				run_t.gPlasma=pdata[6];
+				if(run_t.gPlasma ==1){
+                  LED_PLASMA_ON();
+				}
+				else{
+				   LED_PLASMA_OFF();
+
+				}
+		       
+                run_t.gMouse =pdata[7];
+				if(run_t.gMouse==1){
+					LED_MOUSE_ON();
+				}
+				 else{
+                   LED_MOUSE_OFF();
+
+				}
+
+
+
+		   	}
+
+	     }
+	 
+
+
+	 break;
+
+	 case 0x23: //smart phone app timer opower of of dry 
+	   if(pdata[3] == 0x00){
+	 
+		   if(pdata[4]== 0x01){
+
+		      run_t.gDry=1;
+			  LED_DRY_ON();
+
+		   	}
+		    else{
+
+	            gpro_t.g_manual_shutoff_dry_flag = 1;
+	            run_t.gDry =0;
+			    LED_DRY_OFF();   
+
+			}
+
+
+		 }
+
+
+	 break;
 
      case dry_cmd: //PTC打开关闭指令
        
@@ -281,7 +353,7 @@ void receive_data_from_mainboard(uint8_t *pdata)
             run_t.gDry =1 ;//&& run_t.gPlasma ==1  && run_t.gUltransonic==1
             gpro_t.g_manual_shutoff_dry_flag = 0;
         }
-        else if(pdata[4] == 0x0 && run_t.gPower_On == power_on){
+        else if(pdata[4] == 0x0){
 
             gpro_t.g_manual_shutoff_dry_flag = 1;
             run_t.gDry =0;
