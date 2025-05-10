@@ -78,6 +78,25 @@ void power_on_run_handler(void)
 			gpro_t.set_timer_timing_value_success=0;
 			run_t.timer_dispTime_hours=0;
 		    run_t.timer_dispTime_minutes=0;
+
+			if(run_t.wifi_connect_state_flag == wifi_connect_success){
+
+                   if(run_t.display_beijing_time_flag ==0){
+						run_t.works_dispTime_hours=0;
+						run_t.works_dispTime_minutes=0;
+						run_t.gTimes_time_seconds =0;
+
+				    }
+
+			}
+			else{
+			   
+    		   run_t.works_dispTime_hours=0;
+			   run_t.works_dispTime_minutes=0;
+			   run_t.gTimes_time_seconds =0;
+
+			}
+			
 			run_t.gRunCommand_label= SPECIAL_DISP;
 
 

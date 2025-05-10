@@ -64,12 +64,7 @@ void Power_On_Fun(void)
 
 	run_t.fan_warning=0;
 	run_t.ptc_warning=0;
-    if(run_t.display_beijing_time_flag ==0){
-		run_t.works_dispTime_hours=0;
-		run_t.works_dispTime_minutes=0;
-		run_t.gTimes_time_seconds =0;
-
-    }
+ 
 	
     run_t.gTimer_timer_timing_counter=0;
     gpro_t.set_timer_timing_value_success =0 ;
