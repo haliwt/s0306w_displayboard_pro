@@ -170,11 +170,13 @@ static void vTaskRunPro(void *pvParameters)
      if(key_t.key_wifi_flag==80){
            
         SendData_Set_Command(wifi_cmd,0x01);
-        osDelay(10);
+        osDelay(5);
         key_t.key_wifi_flag =0;
 	
 
        }
+	 
+    
 	   power_on_run_handler();
      
        Display_TimeColon_Blink_Fun();
@@ -253,8 +255,9 @@ static void vTaskStart(void *pvParameters)
             }
             else if((ulValue & MODE_BIT_1 ) != 0){   /* 接收到消息，检测那个位被按下 */
             	 if(run_t.gPower_On == power_on){
-                    key_t.key_mode_flag = 1;
+                   // key_t.key_mode_flag = 1;
                     key_t.key_wifi_flag =0;
+                    //gpro_t.mode_Key_long_counter=0;
 
             	  }
                
@@ -452,7 +455,7 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
             
      //  ENABLE_INT();
    break;
-
+#if 0
    case MODEL_KEY_Pin:
      
 //      if(WIFI_KEY_VALUE() == KEY_DOWN){
@@ -483,7 +486,7 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
    
    break;
 
-
+#endif 
    case DEC_KEY_Pin:
       // DISABLE_INT();
        if(DEC_KEY_VALUE() == KEY_DOWN){

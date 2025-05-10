@@ -10,6 +10,11 @@
 
 KEY_T_TYPEDEF key_t;
 
+//void key_add_fun(void);
+
+//void key_dec_fun(void);
+
+
 
 typedef struct {
     uint8_t *flag;
@@ -63,12 +68,41 @@ void power_key_handler(void) {
     osDelay(10);
 }
 
-void mode_key_handler(void) {
-    SendData_Buzzer();
-    osDelay(5);
-    mode_key_fun();
-}
+#if 0
+void mode_key_handler(void) 
+{
 
+    if(run_t.gPower_On == power_on){
+    if((MODEL_KEY_VALUE() == KEY_DOWN)  && gpro_t.mode_Key_long_counter< 60){
+	   gpro_t.mode_Key_long_counter++;
+
+	if(gpro_t.mode_Key_long_counter > 30){
+		
+		key_t.key_mode_flag++;
+
+	   SendData_Buzzer();
+	   osDelay(5);
+	   mode_key_long_fun();//mode_key_long_handler();
+	   gpro_t.mode_Key_long_counter=80;
+	   gpro_t.mode_key_shot_flag = 0;
+
+
+	 }
+
+    }
+
+	if((gpro_t.mode_Key_long_counter < 29  && gpro_t.mode_Key_long_counter >5 )&& MODEL_KEY_VALUE() == KEY_UP ){
+	 	   key_t.key_mode_flag++;
+		   gpro_t.mode_Key_long_counter=80;
+	       gpro_t.mode_key_shot_flag = 1;
+		   // SendData_Buzzer();
+		   // osDelay(5);
+		   // mode_key_short_fun();//mode_key_long_fun();
+
+	 }
+    }
+}
+#endif 
 void plasma_key_handler(void) 
 {
     if(gpro_t.set_timer_timing_doing_value==0 ||gpro_t.set_timer_timing_doing_value==3){
@@ -128,6 +162,52 @@ void mouse_key_handler(void)
     }
 }
 
+void key_add_fun(void)
+{
+    if(run_t.ptc_warning != 0) return;
+
+    run_t.gTimer_time_colon = 0;
+
+    switch(gpro_t.set_timer_timing_doing_value)
+    {
+
+	    case 3:
+		case 0:  // 设置温度增加
+            SendData_Buzzer();
+            set_temperature_value(+1);
+            break;
+
+        case 1:  // 设置定时增加（每次加60分钟）
+           // SendData_Buzzer();
+            run_t.gTimer_key_timing = 0;
+
+            adjust_timer_minutes(1);  // 固定每次加60分钟
+            break;
+    }
+}
+
+
+void key_dec_fun(void)
+{
+    if(run_t.ptc_warning != 0) return;
+
+    switch(gpro_t.set_timer_timing_doing_value)
+    {
+
+        case 3:
+		case 0:  // 设置温度减少
+            SendData_Buzzer();
+            set_temperature_value(-1);
+            break;
+
+        case 1:  // 设置定时减少（每次减60分钟）
+            //SendData_Buzzer();
+            run_t.gTimer_key_timing = 0;
+
+            adjust_timer_minutes(-1);  // 固定每次减60分钟
+            break;
+    }
+}
 
 // 类似地定义 dry_key_handler, add_key_handler, dec_key_handler 等
 
@@ -148,18 +228,17 @@ void process_keys(void)
         key_t.key_wifi_flag++;
         if(key_t.key_wifi_flag > 30) {
             key_t.key_wifi_flag = 80;
-           // run_t.wifi_led_fast_blink = 1;
-           // run_t.wifi_connect_state_flag = wifi_connect_null;
-          //  run_t.gTimer_wifi_connect_counter = 0;
             SendData_Buzzer();
 			osDelay(5);
         }
     }
 
+	mode_key_handler() ;
+
     // 定义所有按键处理器
     KeyHandler handlers[] = {
         { &key_t.key_power_flag, 0, power_key_handler },
-        { &key_t.key_mode_flag, 0, mode_key_handler },
+       // { &key_t.key_mode_flag, 0, mode_key_handler },
         { &key_t.key_dec_flag, 0, key_dec_fun },
         { &key_t.key_add_flag, 0, key_add_fun },
         { &key_t.key_plasma_flag, 0, plasma_key_handler },

@@ -278,8 +278,257 @@ void disp_smg_blink_set_tempeature_value(void)
 
 
 
+#if 0
+
+// 按键参数宏定义
+#define KEY_LONG_PRESS_THRESHOLD   30  // 长按触发阈值（单位：检测周期）
+#define KEY_SHORT_PRESS_MIN        5   // 短按最小时间（防误触）
+#define KEY_HANDLED_FLAG           80  // 按键已处理标记值
+#define KEY_MAX_COUNTER            60  // 计数器最大值
+#define DEBOUNCE_DELAY_MS          5   // 消抖延时（ms）
+
+void mode_key_handler(void) 
+{
+    static uint8_t last_key_state = KEY_UP; // 上次按键状态
+    static bool is_long_press_handled = false; // 新增：长按是否已处理标志
+    
+    // 只在开机状态下处理按键
+    if (run_t.gPower_On != power_on) {
+        return;
+    }
+
+    uint8_t current_key_state = MODEL_KEY_VALUE();
+    
+    /* 按键按下处理 */
+    if (current_key_state == KEY_DOWN) {
+        if (gpro_t.mode_Key_long_counter < KEY_MAX_COUNTER) {
+            gpro_t.mode_Key_long_counter++;
+        }
+
+        // 长按触发（仅首次达到阈值时执行）
+        if (gpro_t.mode_Key_long_counter >= KEY_LONG_PRESS_THRESHOLD && !is_long_press_handled) {
+            key_t.key_mode_flag++;
+            SendData_Buzzer();  // 确保只触发一次蜂鸣
+            osDelay(DEBOUNCE_DELAY_MS);
+            mode_key_long_fun();      // 执行长按功能
+            is_long_press_handled = true; // 标记已处理，防止重复触发
+            gpro_t.mode_Key_long_counter = KEY_HANDLED_FLAG; // 防止短按误判
+        }
+    } 
+    /* 按键释放处理 */
+    else if (current_key_state == KEY_UP) {
+        // 短按触发（按下时间在5-29个周期之间）
+        if (gpro_t.mode_Key_long_counter >= KEY_SHORT_PRESS_MIN && 
+            gpro_t.mode_Key_long_counter < KEY_LONG_PRESS_THRESHOLD) {
+            key_t.key_mode_flag++;
+            SendData_Buzzer();
+            osDelay(DEBOUNCE_DELAY_MS);
+            // mode_key_short_fun(); // 如需短按功能可取消注释
+        }
+        // 无论短按还是长按，释放时都重置状态
+        gpro_t.mode_Key_long_counter = 0;
+        is_long_press_handled = false; // 允许下次长按检测
+    }
+    
+    last_key_state = current_key_state; // 更新按键状态
+}
 
 
+#endif 
+
+#if 0
+// 按键参数宏定义
+#define KEY_LONG_PRESS_THRESHOLD   30  // 长按触发阈值（单位：检测周期）
+#define KEY_SHORT_PRESS_MIN        5   // 短按最小时间（防误触）
+#define KEY_HANDLED_FLAG           80  // 按键已处理标记值
+#define KEY_MAX_COUNTER            60  // 计数器最大值
+#define DEBOUNCE_DELAY_MS          5   // 消抖延时（ms）
+
+void mode_key_handler(void) 
+{
+    static uint8_t last_key_state = KEY_UP; // 上次按键状态
+    static bool is_long_press_handled = false; // 长按是否已处理标志
+    static bool is_key_released = true;      // 新增：按键是否已完全释放标志
+    
+    // 只在开机状态下处理按键
+    if (run_t.gPower_On != power_on) {
+        return;
+    }
+
+    uint8_t current_key_state = MODEL_KEY_VALUE();
+    
+    /* 按键按下处理 */
+    if (current_key_state == KEY_DOWN) {
+        // 只有按键完全释放后才能开始新的按键检测
+        if (is_key_released) {
+            if (gpro_t.mode_Key_long_counter < KEY_MAX_COUNTER) {
+                gpro_t.mode_Key_long_counter++;
+            }
+
+            // 长按触发（仅首次达到阈值时执行）
+            if (gpro_t.mode_Key_long_counter >= KEY_LONG_PRESS_THRESHOLD && !is_long_press_handled) {
+                key_t.key_mode_flag++;
+                SendData_Buzzer();  // 确保只触发一次蜂鸣
+                osDelay(DEBOUNCE_DELAY_MS);
+                mode_key_long_fun();      // 执行长按功能
+                is_long_press_handled = true; // 标记已处理，防止重复触发
+                gpro_t.mode_Key_long_counter = KEY_HANDLED_FLAG; // 防止短按误判
+                is_key_released = false; // 标记按键未完全释放
+            }
+        }
+    } 
+    /* 按键释放处理 */
+    else if (current_key_state == KEY_UP) {
+        // 只有之前是按下的状态才处理释放
+        if (last_key_state == KEY_DOWN) {
+            // 短按触发（按下时间在5-29个周期之间）
+            if (gpro_t.mode_Key_long_counter >= KEY_SHORT_PRESS_MIN && 
+                gpro_t.mode_Key_long_counter < KEY_LONG_PRESS_THRESHOLD) {
+                key_t.key_mode_flag++;
+                SendData_Buzzer();
+                osDelay(DEBOUNCE_DELAY_MS);
+                // mode_key_short_fun(); // 如需短按功能可取消注释
+            }
+            
+            // 完全释放后才重置状态
+            gpro_t.mode_Key_long_counter = 0;
+            is_long_press_handled = false;
+            is_key_released = true; // 标记按键已完全释放
+        }
+    }
+    
+    last_key_state = current_key_state; // 更新按键状态
+}
+#endif 
 
 
+#if 0
+
+// 按键参数宏定义
+#define KEY_LONG_PRESS_THRESHOLD   30  // 长按触发阈值（单位：检测周期）
+#define KEY_SHORT_PRESS_MIN        5   // 短按最小时间（防误触）
+#define KEY_MAX_COUNTER            60  // 计数器最大值
+#define DEBOUNCE_DELAY_MS          5   // 消抖延时（ms）
+
+// 按键状态机
+typedef enum {
+    KEY_STATE_IDLE,      // 空闲状态（未按下）
+    KEY_STATE_SHORT,     // 短按检测中
+    KEY_STATE_LONG       // 长按已触发
+} KeyState;
+
+void mode_key_handler(void) 
+{
+    static KeyState key_state = KEY_STATE_IDLE; // 当前按键状态
+    static uint8_t last_key_state = KEY_UP;     // 上次物理按键状态
+
+    // 只在开机状态下处理按键
+    if (run_t.gPower_On != power_on) {
+        return;
+    }
+
+    uint8_t current_key_state = MODEL_KEY_VALUE();
+
+    /* 状态机处理 */
+    switch (key_state) {
+        /* 空闲状态：等待按键按下 */
+        case KEY_STATE_IDLE:
+            if (current_key_state == KEY_DOWN) {
+                gpro_t.mode_Key_long_counter = 0; // 开始计数
+                key_state = KEY_STATE_SHORT;      // 进入短按检测
+            }
+            break;
+
+        /* 短按检测中：判断是否满足短按或长按 */
+        case KEY_STATE_SHORT:
+            if (current_key_state == KEY_DOWN) {
+                if (gpro_t.mode_Key_long_counter < KEY_MAX_COUNTER) {
+                    gpro_t.mode_Key_long_counter++;
+                }
+
+                // 长按触发
+                if (gpro_t.mode_Key_long_counter >= KEY_LONG_PRESS_THRESHOLD) {
+                    key_t.key_mode_flag++;
+                    SendData_Buzzer();
+                    osDelay(DEBOUNCE_DELAY_MS);
+                    mode_key_long_fun();       // 执行长按功能
+                    key_state = KEY_STATE_LONG; // 进入长按状态
+                }
+            } 
+            // 按键释放：检查是否短按
+            else if (current_key_state == KEY_UP) {
+                if (gpro_t.mode_Key_long_counter >= KEY_SHORT_PRESS_MIN && 
+                    gpro_t.mode_Key_long_counter < KEY_LONG_PRESS_THRESHOLD) {
+                    key_t.key_mode_flag++;
+                    SendData_Buzzer();
+                    osDelay(DEBOUNCE_DELAY_MS);
+                    // mode_key_short_fun(); // 短按功能（可选）
+                }
+                key_state = KEY_STATE_IDLE; // 返回空闲状态
+            }
+            break;
+
+        /* 长按状态：忽略后续按键直到释放 */
+        case KEY_STATE_LONG:
+            if (current_key_state == KEY_UP) {
+                key_state = KEY_STATE_IDLE; // 释放后回到空闲状态
+            }
+            break;
+    }
+
+    last_key_state = current_key_state; // 更新物理按键状态
+}
+#endif 
+
+// 按键参数宏定义
+#define KEY_LONG_PRESS_THRESHOLD   30  // 长按触发阈值
+#define KEY_SHORT_PRESS_MIN        5   // 短按最小时间
+#define KEY_MAX_COUNTER            60  // 计数器最大值
+#define DEBOUNCE_DELAY_MS          5   // 消抖延时
+
+void mode_key_handler(void) 
+{
+    static uint8_t last_key_state = KEY_UP;
+    static bool long_press_handled = false;  // 长按已处理标志
+    
+    if (run_t.gPower_On != power_on) return;
+
+    uint8_t current_key_state = MODEL_KEY_VALUE();
+    
+    /* 按键按下处理 */
+    if (current_key_state == KEY_DOWN) {
+        if (gpro_t.mode_Key_long_counter < KEY_MAX_COUNTER) {
+            gpro_t.mode_Key_long_counter++;
+        }
+
+        // 长按触发判断
+        if (gpro_t.mode_Key_long_counter >= KEY_LONG_PRESS_THRESHOLD) {
+            if (!long_press_handled) {
+                //key_t.key_mode_flag++;
+                SendData_Buzzer();
+                osDelay(DEBOUNCE_DELAY_MS);
+                mode_key_long_fun();          // 执行长按功能
+                long_press_handled = true; // 标记已处理
+            }
+        }
+    } 
+    /* 按键释放处理 */
+    else if (current_key_state == KEY_UP) {
+        // 短按触发判断（只有在未处理长按的情况下）
+        if (!long_press_handled && 
+            gpro_t.mode_Key_long_counter >= KEY_SHORT_PRESS_MIN && 
+            gpro_t.mode_Key_long_counter < KEY_LONG_PRESS_THRESHOLD) {
+            gpro_t.look_over_timer_state =1;
+            SendData_Buzzer();
+            osDelay(DEBOUNCE_DELAY_MS);
+             mode_key_short_fun();     // 短按功能（如需）
+        }
+        
+        // 释放后重置状态
+        gpro_t.mode_Key_long_counter = 0;
+        long_press_handled = false;
+    }
+    
+    last_key_state = current_key_state;
+}
 

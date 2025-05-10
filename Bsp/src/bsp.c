@@ -116,7 +116,10 @@ void power_on_run_handler(void)
                     case 2: //display 1:   timing times  2: timer times.
                         if(gpro_t.set_timer_timing_doing_value==0 || gpro_t.set_timer_timing_doing_value==3){ //WT.EDIT 2025.05.07
                         if(run_t.ptc_warning ==0 && run_t.fan_warning ==0){ //read main board ptc_warning of ref.
-                            Display_SmgTiming_Value();
+                            if(gpro_t.look_over_timer_state == 0){
+							   Display_SmgTiming_Value();
+
+                            }
 
                          }
                         else{
@@ -148,15 +151,21 @@ void detected_ptc_or_fan_warning_fun(void)
 
 /******************************************************************************
 	*
-	*Function Name:void mode_key_fun(void)
+	*Function Name:void mode_key_long_fun(void)
 	*Funcion: exit this mode set fun ,
 	*Input Ref: NO
 	*Return Ref:NO
 	*
 ******************************************************************************/
-void mode_key_fun(void)
+void mode_key_long_fun(void)
 {
+         gpro_t.set_timer_timing_doing_value = 1;
+		 run_t.gTimer_key_timing = 0;
+		 run_t.gTimer_smg_blink_times =0;
+		 gpro_t.set_timer_first_smg_blink_flag=0;
 
+
+  #if 0
    if(gpro_t.set_timer_timing_doing_value  == 0){
   
        gpro_t.set_timer_timing_doing_value = 1;
@@ -192,10 +201,32 @@ void mode_key_fun(void)
          }
    	   }
 
-
+   #endif 
 
 }
+void mode_key_short_fun(void)
+{
 
+  if(gpro_t.set_timer_timing_value_success==0){
+             
+			run_t.timer_dispTime_hours=0;
+		    run_t.timer_dispTime_minutes=0;
+
+		    Display_Timing(run_t.timer_dispTime_hours,run_t.timer_dispTime_minutes);
+			osDelay(1000);
+
+			gpro_t.look_over_timer_state=0;
+
+		}
+		else{
+
+             Display_Timing(run_t.works_dispTime_hours,run_t.works_dispTime_minutes);
+			 osDelay(1000);
+			 gpro_t.look_over_timer_state=0;
+
+		}
+
+}
 /******************************************************************************
 	*
 	*Function Name:void RunPocess_Command_Handler(void)
@@ -441,29 +472,7 @@ void key_add_fun(void)
 
 }
 #endif 
-void key_add_fun(void)
-{
-    if(run_t.ptc_warning != 0) return;
 
-    run_t.gTimer_time_colon = 0;
-
-    switch(gpro_t.set_timer_timing_doing_value)
-    {
-
-	    case 3:
-		case 0:  // 设置温度增加
-            SendData_Buzzer();
-            set_temperature_value(+1);
-            break;
-
-        case 1:  // 设置定时增加（每次加60分钟）
-           // SendData_Buzzer();
-            run_t.gTimer_key_timing = 0;
-
-            adjust_timer_minutes(1);  // 固定每次加60分钟
-            break;
-    }
-}
 
 /******************************************************
 *
@@ -566,27 +575,7 @@ void key_dec_fun(void)
 
 }
 #endif 
-void key_dec_fun(void)
-{
-    if(run_t.ptc_warning != 0) return;
 
-    switch(gpro_t.set_timer_timing_doing_value)
-    {
-
-        case 3:
-		case 0:  // 设置温度减少
-            SendData_Buzzer();
-            set_temperature_value(-1);
-            break;
-
-        case 1:  // 设置定时减少（每次减60分钟）
-            //SendData_Buzzer();
-            run_t.gTimer_key_timing = 0;
-
-            adjust_timer_minutes(-1);  // 固定每次减60分钟
-            break;
-    }
-}
 
 /*********************************************************************************
  * 

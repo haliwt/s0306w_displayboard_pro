@@ -3,6 +3,7 @@
 #include "main.h"
 #include "stdio.h"
 #include "string.h"
+#include "stdbool.h"
 
 
 #include "usart.h"
@@ -49,7 +50,7 @@
 
 typedef enum{
 
-  TIMER_NO,
+  TIMER_NORMAL_TIMING,
   TIMER_SUCCESS
 
 }TIMER_STATE;
@@ -78,6 +79,8 @@ typedef struct _pro_t{
    uint8_t set_timer_timing_doing_value;
    uint8_t set_temp_value_success;
    uint8_t set_up_temperature_value;
+   uint8_t mode_Key_long_counter;
+   uint8_t  mode_key_shot_flag ;
   
    uint8_t answer_signal_flag;
    uint8_t set_timer_first_smg_blink_flag;
@@ -85,6 +88,7 @@ typedef struct _pro_t{
    uint8_t send_ack_cmd;
    uint8_t receive_copy_cmd;
    uint8_t g_manual_shutoff_dry_flag;
+   uint8_t look_over_timer_state;
   
 
 
@@ -99,6 +103,7 @@ typedef struct _pro_t{
    uint8_t gTimer_again_send_power_on_off;
    uint8_t interval_works_ten_minutes_flag;
    uint8_t gTimer_wifi_led_blink ;
+   uint8_t gTimer_mode_long_key_counter;
    uint16_t gTimer_total_works_two_hours ;
    uint16_t gTimer_4bitsmg_blink_times;
   
@@ -132,11 +137,9 @@ void ai_key_fun(uint8_t data);
 void bsp_dry_fun(uint8_t data);
 
 
-void key_add_fun(void);
 
-void key_dec_fun(void);
 
-void mode_key_fun(void);
+void mode_key_long_fun(void);
 
 void SetDataTemperatureValue(void);
 
@@ -148,6 +151,7 @@ void detected_ptc_or_fan_warning_fun(void);
 
 void works_run_two_hours_handler(void);
 
+void mode_key_short_fun(void);
 
 #endif 
 
