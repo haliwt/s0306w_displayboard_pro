@@ -54,12 +54,13 @@ void sendCommandAndAck(uint8_t cmd, uint8_t value, uint8_t ackType) {
 }
 
 /**********************************************************************************************************
-*	函 数 名: bsp_GetKey
+*	函 数 名: void power_key_handler(void) 
 *	功能说明: 从按键FIFO缓冲区读取一个键值。
 *	形    参:  无
 *	返 回 值: 按键代码
 **********************************************************************************************************/
-void power_key_handler(void) {
+void power_key_handler(void) 
+{
     if(run_t.gPower_On == power_off){
         SendData_PowerOnOff(1); // power on
     } else {
@@ -68,41 +69,13 @@ void power_key_handler(void) {
     osDelay(10);
 }
 
-#if 0
-void mode_key_handler(void) 
-{
 
-    if(run_t.gPower_On == power_on){
-    if((MODEL_KEY_VALUE() == KEY_DOWN)  && gpro_t.mode_Key_long_counter< 60){
-	   gpro_t.mode_Key_long_counter++;
-
-	if(gpro_t.mode_Key_long_counter > 30){
-		
-		key_t.key_mode_flag++;
-
-	   SendData_Buzzer();
-	   osDelay(5);
-	   mode_key_long_fun();//mode_key_long_handler();
-	   gpro_t.mode_Key_long_counter=80;
-	   gpro_t.mode_key_shot_flag = 0;
-
-
-	 }
-
-    }
-
-	if((gpro_t.mode_Key_long_counter < 29  && gpro_t.mode_Key_long_counter >5 )&& MODEL_KEY_VALUE() == KEY_UP ){
-	 	   key_t.key_mode_flag++;
-		   gpro_t.mode_Key_long_counter=80;
-	       gpro_t.mode_key_shot_flag = 1;
-		   // SendData_Buzzer();
-		   // osDelay(5);
-		   // mode_key_short_fun();//mode_key_long_fun();
-
-	 }
-    }
-}
-#endif 
+/**********************************************************************************************************
+*	函 数 名: void plasma_key_handler(void) 
+*	功能说明: 从按键FIFO缓冲区读取一个键值。
+*	形    参:  无
+*	返 回 值: 按键代码
+**********************************************************************************************************/
 void plasma_key_handler(void) 
 {
     if(gpro_t.set_timer_timing_doing_value==0 ||gpro_t.set_timer_timing_doing_value==3){
@@ -233,7 +206,7 @@ void process_keys(void)
         }
     }
 
-	mode_key_handler() ;
+	//mode_key_handler() ;
 
     // 定义所有按键处理器
     KeyHandler handlers[] = {

@@ -162,7 +162,7 @@ static void vTaskRunPro(void *pvParameters)
     while(1)
     {
 
-
+    mode_key_handler() ;
 	process_keys() ;
 
 	if(run_t.gPower_On == power_on){
@@ -175,7 +175,12 @@ static void vTaskRunPro(void *pvParameters)
 	
 
        }
-	 
+	   if(gpro_t.mode_key_shot_flag ==1){
+	   	    gpro_t.mode_key_shot_flag++;
+           // SendData_Buzzer();
+            //osDelay(DEBOUNCE_DELAY_MS);
+            mode_key_short_fun();
+	   	}
     
 	   power_on_run_handler();
      
@@ -255,9 +260,9 @@ static void vTaskStart(void *pvParameters)
             }
             else if((ulValue & MODE_BIT_1 ) != 0){   /* 接收到消息，检测那个位被按下 */
             	 if(run_t.gPower_On == power_on){
-                   // key_t.key_mode_flag = 1;
+                    key_t.key_mode_flag = 1;
                     key_t.key_wifi_flag =0;
-                    //gpro_t.mode_Key_long_counter=0;
+                    gpro_t.mode_Key_long_counter=0;
 
             	  }
                
@@ -455,20 +460,21 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
             
      //  ENABLE_INT();
    break;
-#if 0
+
    case MODEL_KEY_Pin:
-     
-//      if(WIFI_KEY_VALUE() == KEY_DOWN){
-//             xTaskNotifyFromISR(xHandleTaskStart,  /* 目标任务 */
-//               AI_BIT_7,     /* 设置目标任务事件标志位bit0  */
-//               eSetBits,  /* 将目标任务的事件标志位与BIT_0进行或操作， 将结果赋值给事件标志位 */
-//               &xHigherPriorityTaskWoken);
-//
-//        /* 如果xHigherPriorityTaskWoken = pdTRUE，那么退出中断后切到当前最高优先级任务执行 */
-//        portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
-//
-//
-//      }
+      #if 0
+      if(WIFI_KEY_VALUE() == KEY_DOWN){
+             xTaskNotifyFromISR(xHandleTaskStart,  /* 目标任务 */
+               AI_BIT_7,     /* 设置目标任务事件标志位bit0  */
+               eSetBits,  /* 将目标任务的事件标志位与BIT_0进行或操作， 将结果赋值给事件标志位 */
+               &xHigherPriorityTaskWoken);
+
+        /* 如果xHigherPriorityTaskWoken = pdTRUE，那么退出中断后切到当前最高优先级任务执行 */
+        portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+
+
+      }
+        #endif 
        if(MODEL_KEY_VALUE() == KEY_DOWN){
         if(run_t.gPower_On == power_on){
         xTaskNotifyFromISR(xHandleTaskStart,  /* 目标任务 */
@@ -486,7 +492,7 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
    
    break;
 
-#endif 
+
    case DEC_KEY_Pin:
       // DISABLE_INT();
        if(DEC_KEY_VALUE() == KEY_DOWN){

@@ -89,6 +89,7 @@ typedef struct _pro_t{
    uint8_t receive_copy_cmd;
    uint8_t g_manual_shutoff_dry_flag;
    uint8_t look_over_timer_state;
+   uint8_t  input_numbers_flag;
   
 
 

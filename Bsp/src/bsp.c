@@ -75,6 +75,9 @@ void power_on_run_handler(void)
             gpro_t.g_manual_shutoff_dry_flag = 0; //allow open dry function .
             run_t.wifi_led_fast_blink=0;
 			gpro_t.gTimer_temp_compare_counter=0;
+			gpro_t.set_timer_timing_value_success=0;
+			run_t.timer_dispTime_hours=0;
+		    run_t.timer_dispTime_minutes=0;
 			run_t.gRunCommand_label= SPECIAL_DISP;
 
 
@@ -257,6 +260,9 @@ void power_off_run_handler(void)
          //  Power_Off();
            Power_Off_Led_Off();
 		 gpro_t.smartphone_app_timer_power_on_flag =0;
+		   gpro_t.set_timer_timing_value_success=0;
+			run_t.timer_dispTime_hours=0;
+		    run_t.timer_dispTime_minutes=0;
          run_t.power_off_flag = 1;
        break;
 
@@ -355,6 +361,7 @@ void adjust_timer_minutes(int8_t delta_min)
     run_t.hours_two_unit_bit      = run_t.temporary_timer_dispTime_hours % 10;
     run_t.minutes_one_decade_bit  = 0;
     run_t.minutes_one_unit_bit    = 0;
+	gpro_t.input_numbers_flag++;
 
 	SendData_ToMainboard_Data(0x4C, total_hour,0x01);
 	osDelay(5);
