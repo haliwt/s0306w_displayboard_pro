@@ -225,7 +225,7 @@ void send_cmd_ack_hanlder(void)
 void receive_data_from_mainboard(uint8_t *pdata)
 {
     
-
+   static uint8_t power_on_counter;
     switch(pdata[2]){
 
      case 0:
@@ -487,9 +487,20 @@ void receive_data_from_mainboard(uint8_t *pdata)
         if(pdata[3]==0x0F){
         if(pdata[4] == 0x02){ //数据,two 
             
-            run_t.gReal_humtemp[0] = pdata[5] ;//gpro_t.humidity_real_value = pdata[5];
+             if(pdata[5] !=0){
+			    run_t.gReal_humtemp[0] = pdata[5] ;//humidity value 
+
+             }
            
              run_t.gReal_humtemp[1] = pdata[6];
+
+			 if(run_t.gPower_On == power_on && power_on_counter < 10){
+			 	 power_on_counter++;
+		          Display_DHT11_Value();
+
+			 }
+		
+		   
 
         }
         else if(pdata[4] == 0x01){ //数据,one

@@ -94,7 +94,7 @@ void Power_On_Fun(void)
 	  run_t.minutes_one_decade_bit =  minutes_one;
       
 	 TM1639_Write_4Bit_Time(hour_decade,run_t.hours_two_unit_bit,run_t.minutes_one_decade_bit,minutes_two,0);
-     Display_DHT11_Value();
+     //Display_DHT11_Value(); //WT.EIDT 2025.05.10
     
 }
 
