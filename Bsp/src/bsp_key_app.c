@@ -21,7 +21,14 @@ typedef struct {
     uint8_t threshold;
     void (*onPress)(void);
 } KeyHandler;
-
+/****************************************************************
+	*
+	*Function Name :void handle_key(KeyHandler *handler) 
+	*Function : set timer timing how many ?
+	*Input Parameters : struct KeyHandler of reference
+	*Retrurn Parameter :NO
+	*
+*****************************************************************/
 void handle_key(KeyHandler *handler) 
 {
     if (*(handler->flag) == 1) {
@@ -93,6 +100,14 @@ void plasma_key_handler(void)
         gpro_t.gTimer_again_send_power_on_off = 0;
     }
 }
+/****************************************************************
+	*
+	*Function Name :void mode_key_handler(void)
+	*Function : set timer timing how many ?
+	*Input Parameters :NO
+	*Retrurn Parameter :NO
+	*
+*****************************************************************/
 
 void dry_key_handler(void) 
 {
@@ -110,6 +125,14 @@ void dry_key_handler(void)
         }
     }
 }
+/****************************************************************
+	*
+	*Function Name :void mode_key_handler(void)
+	*Function : set timer timing how many ?
+	*Input Parameters :NO
+	*Retrurn Parameter :NO
+	*
+*****************************************************************/
 
 void mouse_key_handler(void) 
 {
@@ -134,7 +157,14 @@ void mouse_key_handler(void)
         }
     }
 }
-
+/****************************************************************
+	*
+	*Function Name :void mode_key_handler(void)
+	*Function : set timer timing how many ?
+	*Input Parameters :NO
+	*Retrurn Parameter :NO
+	*
+*****************************************************************/
 void key_add_fun(void)
 {
     if(run_t.ptc_warning != 0) return;
@@ -181,9 +211,65 @@ void key_dec_fun(void)
             break;
     }
 }
+/****************************************************************
+	*
+	*Function Name :void mode_key_handler(void)
+	*Function : set timer timing how many ?
+	*Input Parameters :NO
+	*Retrurn Parameter :NO
+	*
+*****************************************************************/
 
-// 类似地定义 dry_key_handler, add_key_handler, dec_key_handler 等
+// 按键参数配置（可全局调整）
+#define KEY_LONG_PRESS_THRESHOLD   30      // 300ms长按阈值
+#define DEBOUNCE_TIME_MS          5       // 消抖时间
+#define KEY_SCAN_INTERVAL_MS      10      // 按键扫描间隔
 
+// 优化后的按键处理函数
+void mode_key_handler(void)
+{
+    static uint8_t debounce_counter = 0;
+    static uint8_t stable_state = KEY_UP;
+    static bool long_press_flag = false;
+    
+    // 1. 系统状态检查
+//    if (run_t.gPower_On != power_on) {
+//        gpro_t.mode_Key_long_counter = 0;
+//        return;
+//    }
+
+    // 2. 硬件消抖处理（更稳定的状态检测）
+    uint8_t current_state = MODEL_KEY_VALUE();
+	
+    // 3. 按键状态处理（精简逻辑）
+    if (current_state == KEY_UP && key_t.key_mode_flag==1) {
+        // 按下瞬间立即触发短按
+            key_t.key_mode_flag++;
+		    gpro_t.mode_key_shot_flag = 1;
+            SendData_Buzzer();
+			
+           // mode_key_short_fun();
+            gpro_t.mode_Key_long_counter=0;
+    }
+    else if (current_state == KEY_DOWN && gpro_t.mode_Key_long_counter< 60) {// 长按计数及触发
+            gpro_t.mode_Key_long_counter++;
+            
+            if (gpro_t.mode_Key_long_counter >= KEY_LONG_PRESS_THRESHOLD) {
+				key_t.key_mode_flag++;
+				gpro_t.mode_Key_long_counter=80;
+                SendData_Buzzer();
+                mode_key_long_fun();
+                long_press_flag = true;
+            }
+     } 
+    else {
+        // 释放时重置状态
+        if (gpro_t.mode_Key_long_counter > 0) {
+            gpro_t.mode_Key_long_counter = 0;
+            long_press_flag = false;
+        }
+    }
+}
 
 
 /*
@@ -206,12 +292,12 @@ void process_keys(void)
         }
     }
 
-	//mode_key_handler() ;
+	mode_key_handler() ;
 
     // 定义所有按键处理器
     KeyHandler handlers[] = {
         { &key_t.key_power_flag, 0, power_key_handler },
-       // { &key_t.key_mode_flag, 0, mode_key_handler },
+        //{ &key_t.key_mode_flag, 0, mode_key_handler },
         { &key_t.key_dec_flag, 0, key_dec_fun },
         { &key_t.key_add_flag, 0, key_add_fun },
         { &key_t.key_plasma_flag, 0, plasma_key_handler },

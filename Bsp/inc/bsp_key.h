@@ -187,7 +187,7 @@ void set_timer_fun_led_blink(void);
 
 
 
-void mode_key_handler(void) ;
+//void mode_key_handler(void) ;
 
 
 #endif 

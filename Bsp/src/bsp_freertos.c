@@ -162,7 +162,7 @@ static void vTaskRunPro(void *pvParameters)
     while(1)
     {
 
-    mode_key_handler() ;
+    //mode_key_handler() ;
 	process_keys() ;
 
 	if(run_t.gPower_On == power_on){

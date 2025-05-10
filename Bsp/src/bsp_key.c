@@ -282,63 +282,15 @@ void disp_smg_blink_set_tempeature_value(void)
 }
 
 
-
+/****************************************************************
+	*
+	*Function Name :void mode_key_handler(void) 
+	*Function : 
+	*Input Parameters :NO
+	*Retrurn Parameter :NO
+	*
+*****************************************************************/
 #if 0
-
-// 按键参数宏定义
-#define KEY_LONG_PRESS_THRESHOLD   30  // 长按触发阈值
-#define KEY_SHORT_PRESS_MIN        1   // 短按最小时间
-#define KEY_MAX_COUNTER            60  // 计数器最大值
-#define DEBOUNCE_DELAY_MS          5   // 消抖延时
-
-void mode_key_handler(void) 
-{
-    static uint8_t last_key_state = KEY_UP;
-    static bool long_press_handled = false;  // 长按已处理标志
-    
-    if (run_t.gPower_On != power_on) return;
-
-    uint8_t current_key_state = MODEL_KEY_VALUE();
-    
-    /* 按键按下处理 */
-    if (current_key_state == KEY_DOWN) {
-        if (gpro_t.mode_Key_long_counter < KEY_MAX_COUNTER) {
-            gpro_t.mode_Key_long_counter++;
-        }
-
-        // 长按触发判断
-        if (gpro_t.mode_Key_long_counter >= KEY_LONG_PRESS_THRESHOLD) {
-            if (!long_press_handled) {
-                //key_t.key_mode_flag++;
-                SendData_Buzzer();
-                osDelay(DEBOUNCE_DELAY_MS);
-                mode_key_long_fun();          // 执行长按功能
-                long_press_handled = true; // 标记已处理
-            }
-        }
-    } 
-    /* 按键释放处理 */
-    else if (current_key_state == KEY_UP) {
-        // 短按触发判断（只有在未处理长按的情况下）
-        if (!long_press_handled && 
-            gpro_t.mode_Key_long_counter >= KEY_SHORT_PRESS_MIN && 
-            gpro_t.mode_Key_long_counter < KEY_LONG_PRESS_THRESHOLD) {
-            gpro_t.look_over_timer_state =1;
-            SendData_Buzzer();
-            osDelay(DEBOUNCE_DELAY_MS);
-             mode_key_short_fun();     // 短按功能（如需）
-        }
-        
-        // 释放后重置状态
-        gpro_t.mode_Key_long_counter = 0;
-        long_press_handled = false;
-    }
-    
-    last_key_state = current_key_state;
-}
-#endif 
-
-#if 1
 // 按键参数宏定义
 #define KEY_LONG_PRESS_THRESHOLD   30  // 长按触发阈值（30个周期=300ms）
 #define KEY_SHORT_PRESS_MIN        1   // 短按最小时间（1个周期=10ms）
@@ -358,7 +310,7 @@ void mode_key_handler(void)
 
 
 	 /* 按键释放处理 */
-    if (current_key_state == KEY_UP && key_t.key_mode_flag == 1) {
+    if (current_key_state == KEY_UP && void mode_key_handler(void) ) {
         // 短按触发判断（增加冷却时间判断）
         if (!long_press_handled  &&  gpro_t.mode_Key_long_counter < KEY_LONG_PRESS_THRESHOLD ) {
             key_t.key_mode_flag ++;
