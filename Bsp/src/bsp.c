@@ -664,6 +664,7 @@ void compare_temp_value(void)
    break;
 
    case 0:
+   
         if(run_t.gReal_humtemp[1] >39){
 
          run_t.gDry =0;
@@ -698,6 +699,7 @@ void compare_temp_value(void)
 
 			 }
            }
+	
 	break;
 
       }
