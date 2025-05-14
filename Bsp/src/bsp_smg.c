@@ -826,9 +826,9 @@ void TM1639_Write_2bit_SetUp_TempData(uint8_t onebit,uint8_t twobit,uint8_t sel)
 	 TM1639_Start();
      TM1639_Write_OneByte(AddrC3H);//0xC7H->GRID8->BIT_2
      if(sel==0)
-     	TM1639_Write_OneByte(segNumber_High[twobit]);//WT.EDIT.2025.02.22.//TM1639_Write_OneByte(segNumber_High[twobit]|seg_h);//display ""
+     	TM1639_Write_OneByte(segNumber_High[twobit]|seg_h);//WT.EDIT.2025.02.22.//TM1639_Write_OneByte(segNumber_High[twobit]|seg_h);//display ""
      else{
-	    TM1639_Write_OneByte(segNumber_High[0x10]);//TM1639_Write_OneByte(segNumber_High[0x10]|seg_h);
+	    TM1639_Write_OneByte(segNumber_High[0x10]|seg_h);//TM1639_Write_OneByte(segNumber_High[0x10]|seg_h);
 
 	 }
      TM1639_Stop();
