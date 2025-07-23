@@ -175,7 +175,7 @@ static void vTaskRunPro(void *pvParameters)
 	
 
        }
-	   else if(gpro_t.mode_key_shot_flag ==1){
+	   else if(gpro_t.mode_key_shot_flag ==1 && run_t.ptc_warning ==0 && run_t.fan_warning ==0){
 	   	    gpro_t.mode_key_shot_flag++;
            // SendData_Buzzer();
             //osDelay(DEBOUNCE_DELAY_MS);

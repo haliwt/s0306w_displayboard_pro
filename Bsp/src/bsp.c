@@ -137,7 +137,7 @@ void power_on_run_handler(void)
                     
                     case 2: //display 1:   timing times  2: timer times.
 
-					    if(gpro_t.look_over_timer_state==disp_timing && gpro_t.gTimer_short_mode_key < 2 ){
+					    if(gpro_t.look_over_timer_state==disp_timing && gpro_t.gTimer_short_mode_key < 2 && run_t.ptc_warning ==0 && run_t.fan_warning ==0 ){
 
                               run_t.timer_dispTime_hours=0;
 		                      run_t.timer_dispTime_minutes=0;
@@ -145,7 +145,7 @@ void power_on_run_handler(void)
 			                  
 
 						}
-						else if(gpro_t.look_over_timer_state==disp_timer_timing && gpro_t.gTimer_short_mode_key < 2 ){
+						else if(gpro_t.look_over_timer_state==disp_timer_timing && gpro_t.gTimer_short_mode_key < 2 && run_t.ptc_warning ==0 && run_t.fan_warning ==0 ){
 
 						     // Display_Timing(run_t.timer_dispTime_hours,run_t.timer_dispTime_minutes);
 						     Display_Timing(run_t.works_dispTime_hours,run_t.works_dispTime_minutes);
