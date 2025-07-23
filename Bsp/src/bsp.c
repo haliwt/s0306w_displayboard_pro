@@ -104,7 +104,7 @@ void power_on_run_handler(void)
 	  break;
 
       case SPECIAL_DISP:
-
+          
 
               if(gpro_t.set_timer_timing_doing_value == 1 && run_t.ptc_warning ==0 && run_t.fan_warning ==0){
 
@@ -136,6 +136,30 @@ void power_on_run_handler(void)
 				   break;
                     
                     case 2: //display 1:   timing times  2: timer times.
+
+					    if(gpro_t.look_over_timer_state==disp_timing && gpro_t.gTimer_short_mode_key < 2 ){
+
+                              run_t.timer_dispTime_hours=0;
+		                      run_t.timer_dispTime_minutes=0;
+							  Display_Timing(run_t.timer_dispTime_hours,run_t.timer_dispTime_minutes);
+			                  
+
+						}
+						else if(gpro_t.look_over_timer_state==disp_timer_timing && gpro_t.gTimer_short_mode_key < 2 ){
+
+						     // Display_Timing(run_t.timer_dispTime_hours,run_t.timer_dispTime_minutes);
+						     Display_Timing(run_t.works_dispTime_hours,run_t.works_dispTime_minutes);
+			                 
+
+						}
+						else{
+						if((gpro_t.look_over_timer_state==disp_timing || gpro_t.look_over_timer_state==disp_timer_timing)  && gpro_t.gTimer_short_mode_key > 1){
+
+						     gpro_t.look_over_timer_state=0;
+
+						}
+						
+						
                         if(gpro_t.set_timer_timing_doing_value==0 || gpro_t.set_timer_timing_doing_value==3){ //WT.EDIT 2025.05.07
                         if(run_t.ptc_warning ==0 && run_t.fan_warning ==0){ //read main board ptc_warning of ref.
                             if(gpro_t.look_over_timer_state == 0){
@@ -144,13 +168,15 @@ void power_on_run_handler(void)
                             }
 
                          }
-                        else{
+                         else{
 
                             Warning_Error_Numbers_Fun();
 
                         }
                         
                         }
+						}
+							
 
                      step_state=0;
                     break;
@@ -229,24 +255,26 @@ void mode_key_long_fun(void)
 void mode_key_short_fun(void)
 {
 
-  if(gpro_t.set_timer_timing_value_success==0){
+  if(gpro_t.set_timer_timing_value_success==TIMER_NORMAL_TIMING){
              
 			run_t.timer_dispTime_hours=0;
 		    run_t.timer_dispTime_minutes=0;
 
 		    Display_Timing(run_t.timer_dispTime_hours,run_t.timer_dispTime_minutes);
-			osDelay(1000);
+			//osDelay(1000);
 
-			gpro_t.look_over_timer_state=0;
+			gpro_t.look_over_timer_state=disp_timing;
+			gpro_t.gTimer_short_mode_key=0;
 
-		}
-		else{
+  }
+  else{
 
              Display_Timing(run_t.works_dispTime_hours,run_t.works_dispTime_minutes);
-			 osDelay(1000);
-			 gpro_t.look_over_timer_state=0;
+			 //osDelay(1000);
+			 gpro_t.look_over_timer_state=disp_timer_timing;
+		     gpro_t.gTimer_short_mode_key=0;
 
-		}
+  }
 
 }
 /******************************************************************************
@@ -313,7 +341,7 @@ void power_off_run_handler(void)
 /*********************************************************************************
  * 
  * Function Name:void mouse_on_off_handler(void)
- * // 设置温度并做边界检查
+ * // 设置温度并做边界�?�?
  * 
  **********************************************************************************/
 void set_temperature_value(int8_t delta) {
@@ -368,7 +396,7 @@ void adjust_timer_minutes(int8_t delta_min)
          total_hour =0;
    	}
 	else if (total_hour < 0) {
-        total_hour = 24 ;  // 循环处理负值
+        total_hour = 24 ;  // 循环处理负�??
     }
 
    // total_hour %= 24 ;  // 保证在一天范围内

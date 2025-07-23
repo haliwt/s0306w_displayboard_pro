@@ -64,6 +64,13 @@ typedef enum power_onoff_state_t{
 
 }power_onoff_stae;
 
+typedef enum{
+
+  disp_timing=1,
+  disp_timer_timing=2
+
+}short_mode_key_t;
+
 
 typedef enum{
 
@@ -105,6 +112,7 @@ typedef struct _pro_t{
    uint8_t interval_works_ten_minutes_flag;
    uint8_t gTimer_wifi_led_blink ;
    uint8_t gTimer_mode_long_key_counter;
+   uint8_t gTimer_short_mode_key;
    uint16_t gTimer_total_works_two_hours ;
    uint16_t gTimer_4bitsmg_blink_times;
   

@@ -49,9 +49,9 @@ static TaskHandle_t xHandleTaskStart = NULL;
 
 
 
-///#define QUEUE_LENGTH            1                   /* 队列支持的消息个数 */
+///#define QUEUE_LENGTH            1                   /* 队列支持的消息个�? */
 ///#define QUEUE_ITEM_SIZE         sizeof(uint32_t)    /* 队列中每条消息的大小 */
-//#define SEMAPHORE_BINARY_LENGTH 1                   /* 二值信号量的有效长度 */
+//#define SEMAPHORE_BINARY_LENGTH 1                   /* 二�?�信号量的有效长�? */
 //#define QUEUESET_LENGTH         ((2 * QUEUE_LENGTH) + SEMAPHORE_BINARY_LENGTH)  /* 队列集支持的消息个数 */
 
 
@@ -74,11 +74,11 @@ uint8_t uckey_number;
 uint8_t key_power_flag,decoder_flag ;
 uint8_t check_code;
 /**********************************************************************************************************
-*	凄1�7 敄1�7 各1�7: vTaskTaskUserIF
-*	功能说明: 接口消息处理〄1�7
-*	彄1�7    叄1�7: pvParameters 是在创建该任务时传��的形参
-*	迄1�7 囄1�7 倄1�7: 旄1�7
-*   伄1�7 兄1�7 纄1�7: 1  (数��越小优先级越低，这个跟uCOS相反)
+*	�?1�?7 �?1�?7 �?1�?7: vTaskTaskUserIF
+*	功能说明: 接口消息处理�?1�?7
+*	�?1�?7    �?1�?7: pvParameters 是在创建该任务时传��的形参
+*	�?1�?7 �?1�?7 �?1�?7: �?1�?7
+*   �?1�?7 �?1�?7 �?1�?7: 1  (数��越小优先级越低，这个跟uCOS相反)
 **********************************************************************************************************/
 void freeRTOS_Handler(void)
 {
@@ -88,7 +88,7 @@ void freeRTOS_Handler(void)
 	  /* 创建任务通信机制 */
 	 //  AppObjCreate();
 	  
-	  /* 启动调度，开始执行任劄1�7 */
+	  /* 启动调度，开始执行任�?1�?7 */
 	   vTaskStartScheduler();
 
 
@@ -96,17 +96,17 @@ void freeRTOS_Handler(void)
 
 /**********************************************************************************************************
 *   FunctionName: static void vTaskRunPro(void *pvParameters)
-*	功能说明: 使用函数xTaskNotifyWait接收任务vTaskTaskUserIF发送的事件标志位设置
-*	形    参: pvParameters 是在创建该任务时传递的形参
-*	返 回 值: 无
-*   优 先 级: 1  
+*	功能说明: 使用函数xTaskNotifyWait接收任务vTaskTaskUserIF发�?�的事件标志位设�?
+*	�?    �?: pvParameters 是在创建该任务时传�?�的形参
+*	�? �? �?: �?
+*   �? �? �?: 1  
 
 *   priority : 1  (数priority is 2,number is large priority is large值越低，这个跟uCOS相反)
 **********************************************************************************************************/
 static void vTaskDecoderPro(void *pvParameters)
 {
     BaseType_t xResult;
-	//const TickType_t xMaxBlockTime = pdMS_TO_TICKS(500); /* 设置最大等待时间为30ms */
+	//const TickType_t xMaxBlockTime = pdMS_TO_TICKS(500); /* 设置�?大等待时间为30ms */
 	uint32_t ulValue;
 	
 
@@ -116,12 +116,12 @@ static void vTaskDecoderPro(void *pvParameters)
 
 	xResult = xTaskNotifyWait(0x00000000,
 								  0xFFFFFFFF,     /* Reset the notification value to 0 on */
-								&ulValue,        /* 保存ulNotifiedValue到变量ulValue中 */
-								portMAX_DELAY);//portMAX_DELAY);  /* 阻塞时间30ms，释放CUP控制权,给其它任务执行的权限*/
+								&ulValue,        /* 保存ulNotifiedValue到变量ulValue�? */
+								portMAX_DELAY);//portMAX_DELAY);  /* 阻塞时间30ms，释放CUP控制�?,给其它任务执行的权限*/
 
 		if( xResult == pdPASS )
 		{
-			/* 接收到消息，检测那个位被按下 */
+			/* 接收到消息，�?测那个位被按�? */
 
 			if((ulValue & DECODER_BIT_9) != 0){
 
@@ -148,13 +148,13 @@ static void vTaskDecoderPro(void *pvParameters)
 *	Function: 
 *	Input Ref: pvParameters 是在创建该任务时传��的形参
 *	Return Ref:
-*   priority: 2  (数值越小优先级越低，这个跟uCOS相反)
+*   priority: 2  (数�?�越小优先级越低，这个跟uCOS相反)
 **********************************************************************************************************/
 static void vTaskRunPro(void *pvParameters)
 {
 
 	//BaseType_t xResult;
-	//const TickType_t xMaxBlockTime = pdMS_TO_TICKS(10); /* 设置最大等待时间为30ms */
+	//const TickType_t xMaxBlockTime = pdMS_TO_TICKS(10); /* 设置�?大等待时间为30ms */
 	//uint32_t ulValue;
 	static uint8_t power_on_theFirst_times;
     
@@ -167,7 +167,7 @@ static void vTaskRunPro(void *pvParameters)
 
 	if(run_t.gPower_On == power_on){
 
-     if(key_t.key_wifi_flag==80){
+      if(key_t.key_wifi_flag==80){
            
         SendData_Set_Command(wifi_cmd,0x01);
         osDelay(5);
@@ -175,7 +175,7 @@ static void vTaskRunPro(void *pvParameters)
 	
 
        }
-	   if(gpro_t.mode_key_shot_flag ==1){
+	   else if(gpro_t.mode_key_shot_flag ==1){
 	   	    gpro_t.mode_key_shot_flag++;
            // SendData_Buzzer();
             //osDelay(DEBOUNCE_DELAY_MS);
@@ -219,15 +219,15 @@ static void vTaskRunPro(void *pvParameters)
 *
 *	Function Name: vTaskStart
 *	Function: 
-*	Input Ref: pvParameters 是在创建该任务时传递的形参
+*	Input Ref: pvParameters 是在创建该任务时传�?�的形参
 *	Return Ref:
-*priority: 3  (数值越小优先级越低，这个跟uCOS相反)
+*priority: 3  (数�?�越小优先级越低，这个跟uCOS相反)
 *
 **********************************************************************************************************/
 static void vTaskStart(void *pvParameters)
 {
 	BaseType_t xResult;
-    //const TickType_t xMaxBlockTime = pdMS_TO_TICKS(1000); /* 设置最大等待时间为30ms */
+    //const TickType_t xMaxBlockTime = pdMS_TO_TICKS(1000); /* 设置�?大等待时间为30ms */
 	uint32_t ulValue;
     static  uint8_t power_on_times;
 
@@ -240,11 +240,11 @@ static void vTaskStart(void *pvParameters)
 
        xResult = xTaskNotifyWait(0x00000000,      
 						           0xFFFFFFFF,      
-						          &ulValue,        /* 保存ulNotifiedValue到变量ulValue中 */
-								  portMAX_DELAY);  /* 最大允许延迟时间 */
+						          &ulValue,        /* 保存ulNotifiedValue到变量ulValue�? */
+								  portMAX_DELAY);  /* �?大允许延迟时�? */
         if( xResult == pdPASS ){
 		    
-            /* 接收到消息，检测那个位被按下 */
+            /* 接收到消息，�?测那个位被按�? */
             if((ulValue & POWER_BIT_0 ) != 0)
             {
             if(power_on_times==0){
@@ -258,7 +258,7 @@ static void vTaskStart(void *pvParameters)
 			}
                 
             }
-            else if((ulValue & MODE_BIT_1 ) != 0){   /* 接收到消息，检测那个位被按下 */
+            else if((ulValue & MODE_BIT_1 ) != 0){   /* 接收到消息，�?测那个位被按�? */
             	 if(run_t.gPower_On == power_on){
                     key_t.key_mode_flag = 1;
                     key_t.key_wifi_flag =0;
@@ -275,7 +275,7 @@ static void vTaskStart(void *pvParameters)
                 }
                
             }
-            else if((ulValue & ADD_BIT_3 ) != 0){   /* 接收到消息，检测那个位被按下 */
+            else if((ulValue & ADD_BIT_3 ) != 0){   /* 接收到消息，�?测那个位被按�? */
             	 if(run_t.gPower_On == power_on){
 					 key_t.key_add_flag =1;
 					 key_t.key_wifi_flag =0;
@@ -284,21 +284,21 @@ static void vTaskStart(void *pvParameters)
 
 
             }
-            else if((ulValue & PLASMA_BIT_5 ) != 0){   /* 接收到消息，检测那个位被按下 */
+            else if((ulValue & PLASMA_BIT_5 ) != 0){   /* 接收到消息，�?测那个位被按�? */
             	  if(run_t.gPower_On == power_on){
                     key_t.key_plasma_flag =1;
                     key_t.key_wifi_flag =0;
             	                
             	    }
             }
-            else if((ulValue & DRY_BIT_6 ) != 0){   /* 接收到消息，检测那个位被按下 */
+            else if((ulValue & DRY_BIT_6 ) != 0){   /* 接收到消息，�?测那个位被按�? */
             	   if(run_t.gPower_On == power_on){
                     key_t.key_dry_flag =1;
                     key_t.key_wifi_flag =0;
             	               
             	  }
              }
-            else if((ulValue & MOUSE_BIT_4 ) != 0){   /* 接收到消息，检测那个位被按下 */
+            else if((ulValue & MOUSE_BIT_4 ) != 0){   /* 接收到消息，�?测那个位被按�? */
             	 if(run_t.gPower_On == power_on){
                    
             	      key_t.key_mouse_flag =1;
@@ -322,24 +322,24 @@ void AppTaskCreate (void)
 {
 
   xTaskCreate( vTaskDecoderPro,    		/* 任务函数  */
-                 "vTaskDecoderPro",  		/* 任务各1�7    */
+                 "vTaskDecoderPro",  		/* 任务�?1�?7    */
                  128,         		/* stack大小，单位word，也就是4字节 */
                  NULL,        		/* 任务参数  */
-                 2,           		/* 任务优先纄1�7 数��越小优先级越低，这个跟uCOS相反 */
+                 2,           		/* 任务优先�?1�?7 数��越小优先级越低，这个跟uCOS相反 */
                  &xHandleTaskDecoderPro); /* 任务句柄  */
 
   xTaskCreate( vTaskRunPro,    		/* 任务函数  */
-                 "vTaskRunPro",  		/* 任务各1�7    */
+                 "vTaskRunPro",  		/* 任务�?1�?7    */
                  128,         		/* stack大小，单位word，也就是4字节 */
                  NULL,        		/* 任务参数  */
-                 1,           		/* 任务优先纄1�7 数��越小优先级越低，这个跟uCOS相反 */
+                 1,           		/* 任务优先�?1�?7 数��越小优先级越低，这个跟uCOS相反 */
                  &xHandleTaskRunPro); /* 任务句柄  */
 	
 	xTaskCreate( vTaskStart,     		/* 任务函数  */
-                 "vTaskStart",   		/* 任务各1�7    */
+                 "vTaskStart",   		/* 任务�?1�?7    */
                  128,            		/* 任务栈大小，单位word，也就是4字节 */
                  NULL,           		/* 任务参数  */
-                 3,              		/* 任务优先纄1�7 数��越小优先级越低，这个跟uCOS相反 */
+                 3,              		/* 任务优先�?1�?7 数��越小优先级越低，这个跟uCOS相反 */
                  &xHandleTaskStart );   /* 任务句柄  */
 }
 
@@ -403,10 +403,10 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
               
                 xTaskNotifyFromISR(xHandleTaskDecoderPro,  /* 目标任务 */
                                     DECODER_BIT_9,     /* 设置目标任务事件标志位bit0  */
-                                    eSetBits,  /* 将目标任务的事件标志位与BIT_0进行或操作， 将结果赋值给事件标志位 */
+                                    eSetBits,  /* 将目标任务的事件标志位与BIT_0进行或操作， 将结果赋值给事件标志�? */
                                     &xHigherPriorityTaskWoken);
 
-                /* 如果xHigherPriorityTaskWoken = pdTRUE，那么退出中断后切到当前最高优先级任务执行 */
+                /* 如果xHigherPriorityTaskWoken = pdTRUE，那么�??出中断后切到当前�?高优先级任务执行 */
                 portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
                   
               }
@@ -449,7 +449,7 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
 
         xTaskNotifyFromISR(xHandleTaskStart,  /* 目标任务 */
         POWER_BIT_0,      /* 设置目标任务事件标志位bit0  */
-        eSetBits,  /* 将目标任务的事件标志位与BIT_0进行或操作， 将结果赋值给事件标志位 */
+        eSetBits,  /* 将目标任务的事件标志位与BIT_0进行或操作， 将结果赋值给事件标志�? */
         &xHigherPriorityTaskWoken);
 
 
@@ -466,10 +466,10 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
       if(WIFI_KEY_VALUE() == KEY_DOWN){
              xTaskNotifyFromISR(xHandleTaskStart,  /* 目标任务 */
                AI_BIT_7,     /* 设置目标任务事件标志位bit0  */
-               eSetBits,  /* 将目标任务的事件标志位与BIT_0进行或操作， 将结果赋值给事件标志位 */
+               eSetBits,  /* 将目标任务的事件标志位与BIT_0进行或操作， 将结果赋值给事件标志�? */
                &xHigherPriorityTaskWoken);
 
-        /* 如果xHigherPriorityTaskWoken = pdTRUE，那么退出中断后切到当前最高优先级任务执行 */
+        /* 如果xHigherPriorityTaskWoken = pdTRUE，那么�??出中断后切到当前�?高优先级任务执行 */
         portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
 
 
@@ -479,10 +479,10 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
         if(run_t.gPower_On == power_on){
         xTaskNotifyFromISR(xHandleTaskStart,  /* 目标任务 */
                MODE_BIT_1,     /* 设置目标任务事件标志位bit0  */
-               eSetBits,  /* 将目标任务的事件标志位与BIT_0进行或操作， 将结果赋值给事件标志位 */
+               eSetBits,  /* 将目标任务的事件标志位与BIT_0进行或操作， 将结果赋值给事件标志�? */
                &xHigherPriorityTaskWoken);
 
-        /* 如果xHigherPriorityTaskWoken = pdTRUE，那么退出中断后切到当前最高优先级任务执行 */
+        /* 如果xHigherPriorityTaskWoken = pdTRUE，那么�??出中断后切到当前�?高优先级任务执行 */
         portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
 
 
@@ -499,10 +499,10 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
         if(run_t.gPower_On == power_on){
          xTaskNotifyFromISR(xHandleTaskStart,  /* 目标任务 */
                 DEC_BIT_2,     /* 设置目标任务事件标志位bit0  */
-                eSetBits,  /* 将目标任务的事件标志位与BIT_0进行或操作， 将结果赋值给事件标志位 */
+                eSetBits,  /* 将目标任务的事件标志位与BIT_0进行或操作， 将结果赋值给事件标志�? */
                 &xHigherPriorityTaskWoken);
    
-         /* 如果xHigherPriorityTaskWoken = pdTRUE，那么退出中断后切到当前最高优先级任务执行 */
+         /* 如果xHigherPriorityTaskWoken = pdTRUE，那么�??出中断后切到当前�?高优先级任务执行 */
          portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
         }
         }
@@ -515,10 +515,10 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
         if(run_t.gPower_On == power_on){
         xTaskNotifyFromISR(xHandleTaskStart,  /* 目标任务 */
                 ADD_BIT_3,     /* 设置目标任务事件标志位bit0  */
-                eSetBits,  /* 将目标任务的事件标志位与BIT_0进行或操作， 将结果赋值给事件标志位 */
+                eSetBits,  /* 将目标任务的事件标志位与BIT_0进行或操作， 将结果赋值给事件标志�? */
                 &xHigherPriorityTaskWoken);
    
-         /* 如果xHigherPriorityTaskWoken = pdTRUE，那么退出中断后切到当前最高优先级任务执行 */
+         /* 如果xHigherPriorityTaskWoken = pdTRUE，那么�??出中断后切到当前�?高优先级任务执行 */
          portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
             }
         }
@@ -532,10 +532,10 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
        if(run_t.gPower_On == power_on){
         xTaskNotifyFromISR(xHandleTaskStart,  /* 目标任务 */
                 DRY_BIT_6,     /* 设置目标任务事件标志位bit0  */
-                eSetBits,  /* 将目标任务的事件标志位与BIT_0进行或操作， 将结果赋值给事件标志位 */
+                eSetBits,  /* 将目标任务的事件标志位与BIT_0进行或操作， 将结果赋值给事件标志�? */
                 &xHigherPriorityTaskWoken);
    
-         /* 如果xHigherPriorityTaskWoken = pdTRUE，那么退出中断后切到当前最高优先级任务执行 */
+         /* 如果xHigherPriorityTaskWoken = pdTRUE，那么�??出中断后切到当前�?高优先级任务执行 */
          portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
             }
         }
@@ -548,10 +548,10 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
         if(run_t.gPower_On == power_on){
         xTaskNotifyFromISR(xHandleTaskStart,  /* 目标任务 */
                 PLASMA_BIT_5,     /* 设置目标任务事件标志位bit0  */
-                eSetBits,  /* 将目标任务的事件标志位与BIT_0进行或操作， 将结果赋值给事件标志位 */
+                eSetBits,  /* 将目标任务的事件标志位与BIT_0进行或操作， 将结果赋值给事件标志�? */
                 &xHigherPriorityTaskWoken);
    
-         /* 如果xHigherPriorityTaskWoken = pdTRUE，那么退出中断后切到当前最高优先级任务执行 */
+         /* 如果xHigherPriorityTaskWoken = pdTRUE，那么�??出中断后切到当前�?高优先级任务执行 */
          portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
         }
         }
@@ -564,10 +564,10 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
         if( run_t.gPower_On == power_on){
         xTaskNotifyFromISR(xHandleTaskStart,  /* 目标任务 */
                 MOUSE_BIT_4,     /* 设置目标任务事件标志位bit0  */
-                eSetBits,  /* 将目标任务的事件标志位与BIT_0进行或操作， 将结果赋值给事件标志位 */
+                eSetBits,  /* 将目标任务的事件标志位与BIT_0进行或操作， 将结果赋值给事件标志�? */
                 &xHigherPriorityTaskWoken);
    
-         /* 如果xHigherPriorityTaskWoken = pdTRUE，那么退出中断后切到当前最高优先级任务执行 */
+         /* 如果xHigherPriorityTaskWoken = pdTRUE，那么�??出中断后切到当前�?高优先级任务执行 */
          portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
             }
          }
