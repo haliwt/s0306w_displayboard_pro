@@ -162,7 +162,7 @@ static void vTaskRunPro(void *pvParameters)
     while(1)
     {
 
-    //mode_key_handler() ;
+
 	process_keys() ;
 
 	if(run_t.gPower_On == power_on){
@@ -171,7 +171,8 @@ static void vTaskRunPro(void *pvParameters)
            
         SendData_Set_Command(wifi_cmd,0x01);
         osDelay(5);
-        key_t.key_wifi_flag =0;
+	    gpro_t.gTimer_wifi_key = 0;
+        key_t.key_wifi_flag =90;
 	
 
        }
@@ -195,6 +196,12 @@ static void vTaskRunPro(void *pvParameters)
          Display_DHT11_Value();
 
        }
+	   if(gpro_t.gTimer_wifi_key> 1 && key_t.key_wifi_flag ==90){
+
+	        key_t.key_wifi_flag=0;
+
+
+	   }
      
        works_run_two_hours_handler();
 

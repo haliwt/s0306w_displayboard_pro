@@ -83,6 +83,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	  gpro_t.gTimer_set_temperature_value++;
 	  gpro_t.gTimer_wifi_led_blink ++;
 	  gpro_t.gTimer_short_mode_key++;
+	  gpro_t.gTimer_wifi_key++;
 
        
        

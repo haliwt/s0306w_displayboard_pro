@@ -1,5 +1,6 @@
 #include "bsp.h"
 
+#define   DEBUT_FLAG    0
 
 
 void (*single_ai_fun)(uint8_t cmd);
@@ -299,41 +300,7 @@ static void WorksTime_DonotDisplay_Fun(void)
 	       }
   }
 }
-#if 0
-static void Smg_DisplayFan_Level_Value_Fun(uint8_t fan_level)
-{
 
-    static uint8_t fan_max=0xff,fan_min=0xff;
-
-    if(fan_level ==fan_speed_max){
-    
-    if(fan_max != run_t.fan_key_max){
-       fan_max = run_t.fan_key_max;
-      SendData_Set_Command(MOUSE_RUN);
-
-     }
-   }
-   else{
-
-       if(fan_min != run_t.fan_key_min){
-          fan_min = run_t.fan_key_min;
-          SendData_Set_Command(FAN_LEVEL_MIN);
-   
-        }
-   }
-    
-    TM1639_Write_4Bit_Fan_Level(fan_level);
-    if(run_t.gTimer_display_fan_level > 2){
-        run_t.gTimer_display_fan_level=0;
-        gpro_t.gmouse =0;
-        Display_Timing(run_t.timer_dispTime_hours,run_t.timer_dispTime_minutes);
-
-    }
- 
-
-}
-
-#endif 
 
 /******************************************************************************
 *
@@ -349,11 +316,21 @@ void Display_SmgTiming_Value(void)
 
 	   case TIMER_SUCCESS:
 
-	   
+	          #if DEBUT_FLAG
+			   if(run_t.gTimer_timer_timing_counter > 59){
+					run_t.gTimer_timer_timing_counter =0;
+						  
+				   run_t.timer_dispTime_minutes =  run_t.timer_dispTime_minutes - 50;
+
+
+
+			  #else
 			   if(run_t.gTimer_timer_timing_counter > 59){
 			    run_t.gTimer_timer_timing_counter =0;
 			
 				run_t.timer_dispTime_minutes -- ;
+
+			  #endif 
 			
 			    if(run_t.timer_dispTime_minutes <  0 ){
 					 
@@ -372,6 +349,7 @@ void Display_SmgTiming_Value(void)
 			        gpro_t.send_ack_cmd = check_ack_power_off;//ack_power_off;
 					gpro_t.gTimer_again_send_power_on_off =0;
 					SendData_PowerOnOff(0);//power off
+					osDelay(10);
 					
 			      }
 		}

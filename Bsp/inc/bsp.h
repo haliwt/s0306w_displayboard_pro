@@ -113,6 +113,7 @@ typedef struct _pro_t{
    uint8_t gTimer_wifi_led_blink ;
    uint8_t gTimer_mode_long_key_counter;
    uint8_t gTimer_short_mode_key;
+   uint8_t gTimer_wifi_key;
    uint16_t gTimer_total_works_two_hours ;
    uint16_t gTimer_4bitsmg_blink_times;
   

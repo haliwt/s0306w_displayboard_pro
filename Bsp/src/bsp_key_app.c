@@ -283,9 +283,9 @@ void mode_key_handler(void)
 void process_keys(void) 
 {
     // 处理WiFi�?
-    if(WIFI_KEY_VALUE() == KEY_DOWN && key_t.key_wifi_flag < 60 && run_t.gPower_On == power_on) {
+    if(WIFI_KEY_VALUE() == KEY_DOWN && key_t.key_wifi_flag < 60 && run_t.gPower_On == power_on){
         key_t.key_wifi_flag++;
-        if(key_t.key_wifi_flag > 30) {
+        if(key_t.key_wifi_flag > 30  && key_t.key_wifi_flag < 60) {
             key_t.key_wifi_flag = 80;
             SendData_Buzzer();
 			osDelay(5);
