@@ -1,7 +1,7 @@
 /*
  * bsp_key_app.c
  *
- *  Created on: 2025年2月19日
+ *  Created on: 2025�?2�?19�?
  *      Author: Administrator
  */
 
@@ -48,10 +48,10 @@ void handle_key(KeyHandler *handler)
 
 
 /**********************************************************************************************************
-*	函 数 名: bsp_PutKey
-*	功能说明: 将1个键值压入按键FIFO缓冲区。可用于模拟一个按键。
-*	形    参:  _KeyCode : 按键代码
-*	返 回 值: 无
+*	�? �? �?: bsp_PutKey
+*	功能说明: �?1个键值压入按键FIFO缓冲区�?�可用于模拟�?个按键�??
+*	�?    �?:  _KeyCode : 按键代码
+*	�? �? �?: �?
 **********************************************************************************************************/
 void sendCommandAndAck(uint8_t cmd, uint8_t value, uint8_t ackType) {
     SendData_Set_Command(cmd, value);
@@ -61,10 +61,10 @@ void sendCommandAndAck(uint8_t cmd, uint8_t value, uint8_t ackType) {
 }
 
 /**********************************************************************************************************
-*	函 数 名: void power_key_handler(void) 
-*	功能说明: 从按键FIFO缓冲区读取一个键值。
-*	形    参:  无
-*	返 回 值: 按键代码
+*	�? �? �?: void power_key_handler(void) 
+*	功能说明: 从按键FIFO缓冲区读取一个键值�??
+*	�?    �?:  �?
+*	�? �? �?: 按键代码
 **********************************************************************************************************/
 void power_key_handler(void) 
 {
@@ -78,10 +78,10 @@ void power_key_handler(void)
 
 
 /**********************************************************************************************************
-*	函 数 名: void plasma_key_handler(void) 
-*	功能说明: 从按键FIFO缓冲区读取一个键值。
-*	形    参:  无
-*	返 回 值: 按键代码
+*	�? �? �?: void plasma_key_handler(void) 
+*	功能说明: 从按键FIFO缓冲区读取一个键值�??
+*	�?    �?:  �?
+*	�? �? �?: 按键代码
 **********************************************************************************************************/
 void plasma_key_handler(void) 
 {
@@ -120,7 +120,7 @@ void dry_key_handler(void)
         } else {
             sendCommandAndAck(dry_cmd, 0x00, check_ack_ptc_off);
             run_t.gDry = 0;
-            gpro_t.g_manual_shutoff_dry_flag = 1; // 手动关闭后不再自动开启
+            gpro_t.g_manual_shutoff_dry_flag = 1; // 手动关闭后不再自动开�?
             LED_DRY_OFF();
         }
     }
@@ -138,7 +138,7 @@ void mouse_key_handler(void)
 {
     if(gpro_t.set_timer_timing_doing_value == 0 || gpro_t.set_timer_timing_doing_value == 3) {
         if(run_t.gMouse == 0) {
-            // 开启 Mouse 功能
+            // �?�? Mouse 功能
             SendData_Set_Command(mouse_cmd, 0x01);
             osDelay(5);
             run_t.gMouse = 1;
@@ -180,11 +180,11 @@ void key_add_fun(void)
             set_temperature_value(+1);
             break;
 
-        case 1:  // 设置定时增加（每次加60分钟）
+        case 1:  // 设置定时增加（每次加60分钟�?
            // SendData_Buzzer();
             run_t.gTimer_key_timing = 0;
 
-            adjust_timer_minutes(1);  // 固定每次加60分钟
+            adjust_timer_minutes(1);  // 固定每次�?60分钟
             break;
     }
 }
@@ -203,11 +203,11 @@ void key_dec_fun(void)
             set_temperature_value(-1);
             break;
 
-        case 1:  // 设置定时减少（每次减60分钟）
+        case 1:  // 设置定时减少（每次减60分钟�?
             //SendData_Buzzer();
             run_t.gTimer_key_timing = 0;
 
-            adjust_timer_minutes(-1);  // 固定每次减60分钟
+            adjust_timer_minutes(-1);  // 固定每次�?60分钟
             break;
     }
 }
@@ -220,8 +220,8 @@ void key_dec_fun(void)
 	*
 *****************************************************************/
 
-// 按键参数配置（可全局调整）
-#define KEY_LONG_PRESS_THRESHOLD   30      // 300ms长按阈值
+// 按键参数配置（可全局调整�?
+#define KEY_LONG_PRESS_THRESHOLD   30      // 300ms长按阈�??
 #define DEBOUNCE_TIME_MS          5       // 消抖时间
 #define KEY_SCAN_INTERVAL_MS      10      // 按键扫描间隔
 
@@ -232,7 +232,7 @@ void mode_key_handler(void)
     static uint8_t stable_state = KEY_UP;
     static bool long_press_flag = false;
     
-    // 1. 系统状态检查
+    // 1. 系统状�?�检�?
 //    if (run_t.gPower_On != power_on) {
 //        gpro_t.mode_Key_long_counter = 0;
 //        return;
@@ -241,7 +241,7 @@ void mode_key_handler(void)
     // 2. 硬件消抖处理（更稳定的状态检测）
     uint8_t current_state = MODEL_KEY_VALUE();
 	
-    // 3. 按键状态处理（精简逻辑）
+    // 3. 按键状�?�处理（精简逻辑�?
     if (current_state == KEY_UP && key_t.key_mode_flag==1) {
         // 按下瞬间立即触发短按
             key_t.key_mode_flag++;
@@ -251,7 +251,7 @@ void mode_key_handler(void)
            // mode_key_short_fun();
             gpro_t.mode_Key_long_counter=0;
     }
-    else if (current_state == KEY_DOWN && gpro_t.mode_Key_long_counter< 60) {// 长按计数及触发
+    else if (current_state == KEY_DOWN && gpro_t.mode_Key_long_counter< 60) {// 长按计数及触�?
             gpro_t.mode_Key_long_counter++;
             
             if (gpro_t.mode_Key_long_counter >= KEY_LONG_PRESS_THRESHOLD) {
@@ -263,7 +263,7 @@ void mode_key_handler(void)
             }
      } 
     else {
-        // 释放时重置状态
+        // 释放时重置状�?
         if (gpro_t.mode_Key_long_counter > 0) {
             gpro_t.mode_Key_long_counter = 0;
             long_press_flag = false;
@@ -274,15 +274,15 @@ void mode_key_handler(void)
 
 /*
 *********************************************************************************************************
-*	函 数 名: void process_keys(void) 
+*	�? �? �?: void process_keys(void) 
 *	功能说明:
-*	形    参：无
-*	返 回 值: 按键代码
+*	�?    参：�?
+*	�? �? �?: 按键代码
 *********************************************************************************************************
 */
 void process_keys(void) 
 {
-    // 处理WiFi键
+    // 处理WiFi�?
     if(WIFI_KEY_VALUE() == KEY_DOWN && key_t.key_wifi_flag < 60 && run_t.gPower_On == power_on) {
         key_t.key_wifi_flag++;
         if(key_t.key_wifi_flag > 30) {
@@ -291,10 +291,12 @@ void process_keys(void)
 			osDelay(5);
         }
     }
+    else{
+		mode_key_handler() ;
 
-	mode_key_handler() ;
+    
 
-    // 定义所有按键处理器
+    // 定义�?有按键处理器
     KeyHandler handlers[] = {
         { &key_t.key_power_flag, 0, power_key_handler },
         //{ &key_t.key_mode_flag, 0, mode_key_handler },
@@ -308,6 +310,7 @@ void process_keys(void)
     // 循环处理每个按键
     for (int i = 0; i < sizeof(handlers)/sizeof(handlers[0]); i++) {
         handle_key(&handlers[i]);
+    }
     }
 }
 

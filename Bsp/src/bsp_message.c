@@ -1,7 +1,7 @@
 /*
  * bsp_message.c
  *
- *  Created on: 2025年2月19日
+ *  Created on: 2025�?2�?19�?
  *      Author: Administrator
  */
 #include "bsp.h"
@@ -278,7 +278,7 @@ void receive_data_from_mainboard(uint8_t *pdata)
        
      break; 
 
-	 case 0x20: //手机定时开机，发送的数据，3个。
+	 case 0x20: //手机定时�?机，发�?�的数据�?3个�??
 
 	     if(pdata[3]==0x0F){ //power on by smart phone APP
 
@@ -519,7 +519,7 @@ void receive_data_from_mainboard(uint8_t *pdata)
         }
       break;
 
-      case beijing_times_data: //表示时间：小时，分，秒
+      case beijing_times_data: //表示时间：小时，分，�?
 
         if(pdata[4] == 0x03){ //数据,has three data
 
@@ -593,7 +593,7 @@ void receive_data_from_mainboard(uint8_t *pdata)
 
 	  
 
-        case 0x1D: //表示日期： 年，月，日
+        case 0x1D: //表示日期�? 年，月，�?
 
         if(pdata[2] == 0x0F){ //数据
 
@@ -739,17 +739,18 @@ static void rx_answer_data_form_mainboard(uint8_t *pdata )
 	  if(pdata[5] == 0x01){  // link wifi
 
           run_t.wifi_connect_state_flag = wifi_connect_null;
-	       run_t.wifi_led_fast_blink=1;
+	      run_t.wifi_led_fast_blink=1;
+	      run_t.gTimer_wifi_connect_counter =0; //120s counte start,WT.EDIT 2025.07.24
 			  
 	  
-			}
-			else{ //close
-	  
-			   run_t.wifi_connect_state_flag = wifi_connect_null;
-	            run_t.wifi_led_fast_blink=0;
-			    run_t.display_beijing_time_flag =0;
-	  
-			}
+		}
+//		else{ //close
+//	  
+//			   run_t.wifi_connect_state_flag = wifi_connect_null;
+//	            run_t.wifi_led_fast_blink=0;
+//			    run_t.display_beijing_time_flag =0;
+//	  
+//		}
 
       }
      
